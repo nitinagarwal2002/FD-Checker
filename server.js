@@ -8,9 +8,6 @@ const cors = require("cors");
 const app = express();
 const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
 
-
-// Enable CORS for all origins
-
 // Enable CORS
 app.use(cors());
 app.use(express.static("public"));
@@ -24,42 +21,6 @@ app.get("/test-outbound", async (req, res) => {
   }
 });
 
-// 🔍 Scrape the FD interest rates page and extract the data
-app.get("/api/scrape-fd-rates", async (req, res) => {
-  const selectedBank = req.query.bank;
-
-  // Use ScraperAPI to fetch Policybazaar page
-  const targetURL = encodeURIComponent("https://www.policybazaar.com/fd-interest-rates/");
-  const scraperApiUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${targetURL}`;
-
-  try {
-    const response = await axios.get(scraperApiUrl);
-    const $ = cheerio.load(response.data);
-
-    const listItems = $("ol.number-listing-box li.numbers").not(".bannerinvestmentredirect");
-    let data = [];
-
-    listItems.each((index, element) => {
-      $(element).find(".bannerinvestmentredirect").remove();
-      const rawData = $(element).html().trim();
-      const bankName = $(element).find("h3").text().trim();
-
-      if (bankName === selectedBank) {
-        data.push(rawData);
-      }
-    });
-
-    console.log(data);
-    res.send({ data });
-  } catch (error) {
-    console.error("Error fetching FD interest rates:", error);
-    res.status(500).json({ error: "Failed to fetch FD data" });
-  }
-});
-
-=======
-});
-
 app.get("/api/scrape-fd-rates", async (req, res) => {
   const selectedBank = req.query.bank;
 
@@ -90,7 +51,6 @@ app.get("/api/scrape-fd-rates", async (req, res) => {
   }
 });
 
->>>>>>> 956e1e9 (add env)
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
