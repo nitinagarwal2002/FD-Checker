@@ -1,156 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FD Rates Scraper</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-      }
-      #fd-data {
-        margin-top: 20px;
-        padding: 20px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        background-color: #fafafa;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FD Rates Scraper</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #fd-data {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #fafafa;
+}
 
-      #fd-data h3 {
-        font-size: 24px;
-        margin-bottom: 10px;
-        color: #333;
-      }
+#fd-data h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+}
 
-      #fd-data p {
-        font-size: 16px;
-        color: #555;
-        margin-bottom: 15px;
-      }
+#fd-data p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+}
 
-      #fd-data table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-        background-color: #fff;
-      }
+#fd-data table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: #fff;
+}
 
-      #fd-data th,
-      #fd-data td {
-        padding: 12px 15px;
-        text-align: left;
-        border: 1px solid #ccc;
-        font-size: 15px;
-      }
+#fd-data th,
+#fd-data td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
 
-      #fd-data tr.headingnew td {
-        background-color: #007bff;
-        color: white;
-        font-weight: bold;
-      }
+#fd-data tr.headingnew td {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
 
-      #fd-data tr.type-a:nth-child(even) {
-        background-color: #f9f9f9;
-      }
+#fd-data tr.type-a:nth-child(even) {
+  background-color: #f9f9f9;
+}
 
-      #fd-data tr.type-a:hover {
-        background-color: #f1f1f1;
-      }
+#fd-data tr.type-a:hover {
+  background-color: #f1f1f1;
+}
 
-      #fd-data .button {
-        display: inline-block;
-        margin-top: 5px;
-        background-color: #28a745;
-        color: white;
-        padding: 4px 8px;
-        font-size: 12px;
-        border-radius: 4px;
-      }
+#fd-data .button {
+  display: inline-block;
+  margin-top: 5px;
+  background-color: #28a745;
+  color: white;
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+}
 
-      #fd-data {
-        white-space: pre-wrap;
-        margin-top: 20px;
-        border: 1px solid #ccc;
-        padding: 10px;
-      }
-      button {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        margin-top: 10px;
-      }
-      button:hover {
-        background-color: #45a049;
-      }
-      select {
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>FD Rates Scraper</h1>
+    #fd-data {
+      white-space: pre-wrap;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
 
-    <!-- Dropdown menu for selecting a bank -->
-    <label for="bank">Choose a bank:</label>
-    <select id="bank">
-      <option value="IndusInd Bank FD Rates in 2025">IndusInd Bank</option>
-      <option value="HDFC Bank FD Rates in 2025">HDFC Bank</option>
-      <option value="ICICI Bank FD Rates in 2025">ICICI Bank</option>
-      <option value="Axis Bank FD Rates in 2025">Axis Bank</option>
-      <option value="SBI Bank FD Rates in 2025">SBI Bank</option>
-      <option value="PNB Bank FD Rates in 2025">PNB Bank</option>
-      <option value="Bank of Baroda FD Rates in 2025">Bank of Baroda</option>
-      <option value="Canara Bank FD Rates in 2025">Canara Bank</option>
-      <option value="Kotak Mahindra Bank FD Rates in 2025">
-        Kotak Mahindra Bank
-      </option>
-      <option value="YES Bank FD Rates in 2025">YES Bank</option>
-      <option value="IDFC Bank FD Rates in 2025">IDFC Bank</option>
-      <option value="Indian Bank FD Rates in 2025">Indian Bank</option>
-      <option value="Union Bank of India FD Rates in 2025">Union Bank</option>
-      <option value="Bank of India (BOI) FD Rates in 2025">
-        Bank of India
-      </option>
-      <!-- Add more banks as needed -->
-    </select>
+  <h1>FD Rates Scraper</h1>
 
-    <button onclick="scrapeData()">Fetch FD Rates</button>
+  <!-- Dropdown menu for selecting a bank -->
+  <label for="bank">Choose a bank:</label>
+  <select id="bank">
+    <option value="IndusInd Bank FD Rates in 2025">IndusInd Bank</option>
+    <option value="HDFC Bank FD Rates in 2025">HDFC Bank</option>
+    <option value="ICICI Bank FD Rates in 2025">ICICI Bank</option>
+    <option value="Axis Bank FD Rates in 2025">Axis Bank</option>
+    <option value="SBI Bank FD Rates in 2025">SBI Bank</option>
+    <option value="PNB Bank FD Rates in 2025">PNB Bank</option>
+    <option value="Bank of Baroda FD Rates in 2025">Bank of Baroda</option>
+    <option value="Canara Bank FD Rates in 2025">Canara Bank</option>
+    <option value="Kotak Mahindra Bank FD Rates in 2025">Kotak Mahindra Bank</option>
+    <option value="YES Bank FD Rates in 2025">YES Bank</option>
+    <option value="IDFC Bank FD Rates in 2025">IDFC Bank</option>
+    <option value="Indian Bank FD Rates in 2025">Indian Bank</option>
+    <option value="Union Bank of India FD Rates in 2025">Union Bank</option>
+    <option value="Bank of India (BOI) FD Rates in 2025">Bank of India</option>
+    <!-- Add more banks as needed -->
+  </select>
 
-    <div id="fd-data"></div>
-    <!-- Display the raw data here -->
+  <button onclick="scrapeData()">Fetch FD Rates</button>
 
-    <script>
-      function scrapeData() {
-        // Get the selected bank from the dropdown
-        const selectedBank = document.getElementById("bank").value;
+  <div id="fd-data"></div> <!-- Display the raw data here -->
 
-        // Show a loading message
-        document.getElementById("fd-data").innerHTML = "Loading...";
+  <script>
+    function scrapeData() {
+      // Get the selected bank from the dropdown
+      const selectedBank = document.getElementById('bank').value;
 
-        // Fetch FD rates data for the selected bank
-        fetch(`https://fd-checker.onrender.com/api/scrape-fd-rates?bank=${selectedBank}`)
-          .then((response) => response.json())
-          .then((data) => {
-            let htmlContent = "";
-            data.data.forEach((item) => {
-              htmlContent += `<li>${item}</li>`;
-            });
-            document.getElementById(
-              "fd-data"
-            ).innerHTML = `<ul>${htmlContent}</ul>`;
-          })
-          .catch((error) => {
-            console.error("Error fetching FD rates data:", error);
+      // Show a loading message
+      document.getElementById('fd-data').innerHTML = 'Loading...';
+
+      // Fetch FD rates data for the selected bank
+      fetch(`http://localhost:3000/api/scrape-fd-rates?bank=${selectedBank}`)
+        .then(response => response.json())
+        .then(data => {
+          let htmlContent = '';
+          data.data.forEach(item => {
+            htmlContent += `<li>${item}</li>`;
           });
-      }
-    </script>
-  </body>
+          document.getElementById('fd-data').innerHTML = `<ul>${htmlContent}</ul>`;
+        })
+        .catch(error => {
+          console.error('Error fetching FD rates data:', error);
+        });
+    }
+  </script>
+
+</body>
 </html>
