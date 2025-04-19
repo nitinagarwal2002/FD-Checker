@@ -4,72 +4,58 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
+// 🔐 Replace with your actual ScraperAPI key
+const SCRAPER_API_KEY = "c10255f91b0615d2ea4a37c73b991a51";
+
 // Enable CORS for all origins
 app.use(cors());
 
 // Serve static files
 app.use(express.static("public"));
+
 app.get("/test-outbound", async (req, res) => {
   try {
-    const response = await axios.get("https://www.policybazaar.com/fd-interest-rates/", {
-  headers: {
-    "User-Agent":
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-  }
-});
-
+    const response = await axios.get("https://httpbin.org/get");
+    res.json({ success: true, data: response.data });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
-// Scrape the FD interest rates page and extract the data
-app.get("/api/scrape-fd-rates", (req, res) => {
-  const selectedBank = req.query.bank; // Get the selected bank from the query parameter
+// 🔍 Scrape the FD interest rates page and extract the data
+app.get("/api/scrape-fd-rates", async (req, res) => {
+  const selectedBank = req.query.bank;
 
-  axios
-    .get("https://www.policybazaar.com/fd-interest-rates/", {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-      },
-    })
-    .then((response) => {
-      const $ = cheerio.load(response.data);
+  // Use ScraperAPI to fetch Policybazaar page
+  const targetURL = encodeURIComponent("https://www.policybazaar.com/fd-interest-rates/");
+  const scraperApiUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${targetURL}`;
 
-      // Extract all li elements with the class 'numbers' within ol.number-listing-box
-      const listItems = $("ol.number-listing-box li.numbers").not(
-        ".bannerinvestmentredirect"
-      ); // Exclude li elements with the 'bannerinvestmentredirect' class
+  try {
+    const response = await axios.get(scraperApiUrl);
+    const $ = cheerio.load(response.data);
 
-      let data = [];
-      listItems.each((index, element) => {
-        // Find and remove the last div (with class 'bannerinvestmentredirect') in the li
-        $(element).find(".bannerinvestmentredirect").remove();
+    const listItems = $("ol.number-listing-box li.numbers").not(".bannerinvestmentredirect");
+    let data = [];
 
-        // Get the raw HTML content of each li element and store in array
-        const rawData = $(element).html().trim();
+    listItems.each((index, element) => {
+      $(element).find(".bannerinvestmentredirect").remove();
+      const rawData = $(element).html().trim();
+      const bankName = $(element).find("h3").text().trim();
 
-        // Check if the selected bank matches the data and filter accordingly
-        // Use Cheerio to extract the bank name from inside the <h3> tag or similar
-        const bankName = $(element).find("h3").text().trim();
-
-        if (bankName === selectedBank) {
-          data.push(rawData);
-        }
-      });
-
-      // Send the filtered array of HTML content as the response
-      console.log(data)
-      res.send({ data });
-    })
-    .catch((error) => {
-      console.error("Error fetching FD interest rates:", error);
-      res.status(500).json({ error: "Failed to fetch FD data" });
+      if (bankName === selectedBank) {
+        data.push(rawData);
+      }
     });
+
+    console.log(data);
+    res.send({ data });
+  } catch (error) {
+    console.error("Error fetching FD interest rates:", error);
+    res.status(500).json({ error: "Failed to fetch FD data" });
+  }
 });
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
