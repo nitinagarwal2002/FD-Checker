@@ -11,8 +11,13 @@ app.use(cors());
 app.use(express.static("public"));
 app.get("/test-outbound", async (req, res) => {
   try {
-    const response = await axios.get("https://httpbin.org/get");
-    res.json({ success: true, data: response.data });
+    const response = await axios.get("https://www.policybazaar.com/fd-interest-rates/", {
+  headers: {
+    "User-Agent":
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+  }
+});
+
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
