@@ -9,6 +9,14 @@ app.use(cors());
 
 // Serve static files
 app.use(express.static("public"));
+app.get("/test-outbound", async (req, res) => {
+  try {
+    const response = await axios.get("https://httpbin.org/get");
+    res.json({ success: true, data: response.data });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // Scrape the FD interest rates page and extract the data
 app.get("/api/scrape-fd-rates", (req, res) => {
