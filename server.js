@@ -8,14 +8,10 @@ const cors = require("cors");
 const app = express();
 const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
 
-<<<<<<< HEAD
-// 🔐 Replace with your actual ScraperAPI key
-const SCRAPER_API_KEY = "c10255f91b0615d2ea4a37c73b991a51";
 
 // Enable CORS for all origins
-=======
+
 // Enable CORS
->>>>>>> 956e1e9 (add env)
 app.use(cors());
 app.use(express.static("public"));
 
@@ -26,7 +22,6 @@ app.get("/test-outbound", async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
-<<<<<<< HEAD
 });
 
 // 🔍 Scrape the FD interest rates page and extract the data
