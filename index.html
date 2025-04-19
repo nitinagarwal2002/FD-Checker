@@ -132,7 +132,7 @@
       document.getElementById('fd-data').innerHTML = 'Loading...';
 
       // Fetch FD rates data for the selected bank
-      fetch(`http://localhost:3000/api/scrape-fd-rates?bank=${selectedBank}`)
+      fetch(`https://fd-checker.onrender.com/api/scrape-fd-rates?bank=${selectedBank}`)
         .then(response => response.json())
         .then(data => {
           let htmlContent = '';
